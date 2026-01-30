@@ -1,5 +1,6 @@
 import gradio as gr
 from llm.factory import get_llm
+from rag.retriever import retrieve_docs
 
 with open("prompts/system.txt") as f:
     system_prompt = f.read()
@@ -9,8 +10,24 @@ def reset_chat():
 
 def stream_chat(model_choice, user_input, history):
     llm = get_llm(model_choice)
+    policy_keywords = ["baggage", "cancel", "refund", "check", "policy"]
+    rag_context = retrieve_docs(user_input)
+    if any(k in user_input.lower() for k in policy_keywords):
+       rag_context = retrieve_docs(user_input)
+    merged_system_prompt = system_prompt
+    rag_text = " ".join(rag_context)[:600]
+    if rag_text:
+        merged_system_prompt += (
+            "\n\nIMPORTANT:\n"
+            "You must answer the user's question strictly using the airline policy "
+            "information provided below. If the answer is not present, say "
+            "'I do not have that information in the provided documents.'\n\n"
+            "AIRLINE POLICY INFORMATION:\n"
+            + rag_text
+        )
 
-    messages = [{"role": "system", "content": system_prompt}]
+    messages = [{"role": "system", "content": merged_system_prompt}]
+
     for u, a in history:
         messages.append({"role": "user", "content": u})
         messages.append({"role": "assistant", "content": a})
@@ -25,11 +42,11 @@ def stream_chat(model_choice, user_input, history):
     for token in stream:
         partial += token
         updated_history = base_history + [(user_input, partial)]
-
         yield updated_history, "", updated_history
+
         
 with gr.Blocks() as ui:
-    gr.Markdown("## ✈️ AI Airline Customer Support Assistant")
+    gr.Markdown("## AI Airline Customer Support Assistant")
 
     model_choice = gr.Dropdown(
         ["GPT-4o Mini (OpenRouter)", "Mistral(Ollama)"],
