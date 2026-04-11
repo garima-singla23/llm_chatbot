@@ -1,0 +1,2 @@
+chunk_size,overlap,top_k,MRR
+500,50,3,"{'MRR': 0.76, 'Precision@K': 0.3333333333333332, 'Recall@K': 1.0}"

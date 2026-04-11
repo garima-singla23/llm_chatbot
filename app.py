@@ -1,47 +1,65 @@
+import os
 import gradio as gr
 from llm.factory import get_llm
 from rag.retriever import retrieve_docs
+from pipeline.router import route
+from apis.amadeus_client import AmadeusClient
 
-with open("prompts/system.txt") as f:
-    system_prompt = f.read()
+# Initialize flight search client
+flight_client = AmadeusClient(
+    client_id=os.getenv("AMADEUS_CLIENT_ID"),
+    client_secret=os.getenv("AMADEUS_CLIENT_SECRET")
+)
+
+# Persist entity extraction across turns during clarification flows
+pending_entities = {}
 
 def reset_chat():
+    global pending_entities
+    pending_entities = {}
     return [], []
 
 def stream_chat(model_choice, user_input, history):
-    llm = get_llm(model_choice)
-    policy_keywords = ["baggage", "cancel", "refund", "check", "policy"]
-    rag_context = retrieve_docs(user_input)
-    if any(k in user_input.lower() for k in policy_keywords):
-       rag_context = retrieve_docs(user_input)
-    merged_system_prompt = system_prompt
-    rag_text = " ".join(rag_context)[:600]
-    if rag_text:
-        merged_system_prompt += (
-            "\n\nIMPORTANT:\n"
-            "You must answer the user's question strictly using the airline policy "
-            "information provided below. If the answer is not present, say "
-            "'I do not have that information in the provided documents.'\n\n"
-            "AIRLINE POLICY INFORMATION:\n"
-            + rag_text
-        )
-
-    messages = [{"role": "system", "content": merged_system_prompt}]
-
-    for u, a in history:
-        messages.append({"role": "user", "content": u})
-        messages.append({"role": "assistant", "content": a})
-
-    messages.append({"role": "user", "content": user_input})
-
-    stream = llm.chat(messages, stream=True)
-
-    partial = ""
+    global pending_entities
     base_history = history.copy()
 
-    for token in stream:
-        partial += token
-        updated_history = base_history + [(user_input, partial)]
+    try:
+        llm = get_llm(model_choice)
+    except Exception as exc:
+        error_message = f"I could not initialize {model_choice}: {exc}"
+        updated_history = base_history + [(user_input, error_message)]
+        yield updated_history, "", updated_history
+        return
+
+    # Convert Gradio chat history format to list of tuples for router
+    # Gradio history is [(user, assistant), ...]
+    chat_history = [(u, a) for u, a in base_history]
+
+    try:
+        # Use router to handle intent classification and orchestration
+        response, updated_pending = route(
+            query=user_input,
+            llm=llm,
+            retriever=retrieve_docs,
+            flight_client=flight_client,
+            chat_history=chat_history,
+            pending_entities=pending_entities
+        )
+
+        # Update pending entities for next turn (for clarification flows)
+        if updated_pending:
+            pending_entities.update(updated_pending)
+
+        # Stream response character by character
+        partial = ""
+        for char in response:
+            partial += char
+            updated_history = base_history + [(user_input, partial)]
+            yield updated_history, "", updated_history
+
+    except Exception as exc:
+        error_message = f"I encountered an error: {exc}"
+        updated_history = base_history + [(user_input, error_message)]
         yield updated_history, "", updated_history
 
         
@@ -49,8 +67,8 @@ with gr.Blocks() as ui:
     gr.Markdown("## AI Airline Customer Support Assistant")
 
     model_choice = gr.Dropdown(
-        ["GPT-4o Mini (OpenRouter)", "Mistral(Ollama)"],
-        value="Mistral(Ollama)",
+        ["GPT-4o Mini (OpenRouter)", "Claude Haiku (OpenRouter)", "Phi-3 (Ollama)", "Mistral (Ollama)", "gpt-4o", "gpt-3.5-turbo"],
+        value="GPT-4o Mini (OpenRouter)",
         label="Select Model"
     )
 
@@ -63,17 +81,18 @@ with gr.Blocks() as ui:
     send.click(
         fn=stream_chat,
         inputs=[model_choice, user_input, history_state],
-        outputs=[chatbot,user_input,history_state]
+        outputs=[chatbot, user_input, history_state]
     )
     user_input.submit(
-    fn=stream_chat,
-    inputs=[model_choice, user_input, history_state],
-    outputs=[chatbot, user_input, history_state]
-)
+        fn=stream_chat,
+        inputs=[model_choice, user_input, history_state],
+        outputs=[chatbot, user_input, history_state]
+    )
     reset.click(
-    fn=reset_chat,
-    inputs=[],
-    outputs=[chatbot, history_state]
-)
+        fn=reset_chat,
+        inputs=[],
+        outputs=[chatbot, history_state]
+    )
 
-ui.queue().launch()
+if __name__ == "__main__":
+    ui.queue().launch()

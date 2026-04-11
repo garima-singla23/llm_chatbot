@@ -8,6 +8,12 @@
 __pycache__/
 *.pyc
 
+# Generated RAG artifacts
+rag/vectorstore/
+rag/bm25.pkl
+all_chunks.csv
+experiments.csv
+
 # OS files
 .DS_Store
 Thumbs.db

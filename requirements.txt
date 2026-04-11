@@ -2,7 +2,12 @@ gradio
 openai
 requests
 langchain
+langchain-huggingface
 faiss-cpu
 sentence-transformers
 python-dotenv
 pypdf
+ragas 
+datasets
+rank-bm25
+python-dateutil
