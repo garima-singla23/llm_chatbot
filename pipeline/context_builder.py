@@ -7,8 +7,16 @@ coherent context string for the LLM to reason over.
 
 from typing import Optional, List, Dict, Any
 
-from utils.flight_parser import FlightOffer
+from utils.flightapi_parser import FlightOffer
 from utils.flight_formatter import format_for_llm, format_status_for_llm
+
+
+def filter_citation_sources(sources: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    """Keep only non-expanded sources for citation display."""
+    if not sources:
+        return []
+
+    return [source for source in sources if not bool(source.get("expanded", False))]
 
 
 def _estimate_tokens(text: str) -> int:
@@ -120,7 +128,7 @@ Passengers: {adults} adult(s)"""
     section_e = """## Instructions
 Answer using ONLY the information above.
 Never invent prices, routes, or policies not shown.
-Cite your source for each claim (policy doc or Amadeus API).
+    Cite your source for each claim (policy doc or FlightAPI data).
 Be concise and structured."""
 
     sections.append(section_e)

@@ -32,14 +32,16 @@ class OllamaLLM(BaseLLM):
         allocation_error = "unable to allocate cpu buffer" in error_lower
         runner_terminated = "llama runner process has terminated" in error_lower
 
-        if low_memory and allow_fallback and payload.get("model") != "phi3:latest":
+        resource_failure = low_memory or allocation_error or runner_terminated
+
+        if resource_failure and allow_fallback and payload.get("model") != "phi3:latest":
             fallback_payload = dict(payload)
             fallback_payload["model"] = "phi3:latest"
             fallback_response = self._request(fallback_payload, stream, allow_fallback=False)
             self.model = "phi3:latest"
             return fallback_response
 
-        if low_memory or allocation_error or runner_terminated:
+        if resource_failure:
             raise RuntimeError(
                 "Local Ollama model cannot run due to memory limits. "
                 "Close other apps or switch to a cloud model in the dropdown "

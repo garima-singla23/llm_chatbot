@@ -1,5 +1,6 @@
 import logging
 import re
+from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 
 from utils.intent import classify_intent
@@ -7,9 +8,13 @@ from utils.entity_extractor import extract_entities
 from utils.clarifier import needs_clarification, merge_entities
 from utils.formatter import build_messages
 from apis.aviationstack_client import AviationstackClient
-from utils.flight_parser import parse_offers
+from apis.flightapi_client import FlightAPIClient
+from utils.flightapi_parser import parse_flightapi_response
 from utils.price_normalizer import normalize_currency, rank_offers, tag_offers
 from utils.flight_formatter import format_as_markdown_table
+from utils.citation_formatter import format_inline_citations
+from utils.confidence_gate import should_fallback, build_fallback_response
+from utils.hyde import hyde_retrieve
 from pipeline.context_builder import build_context
 
 logger = logging.getLogger(__name__)
@@ -19,9 +24,9 @@ def route(
     query: str,
     llm,
     retriever,
-    flight_client,
-    chat_history: List[Tuple[str, str]] = [],
-    pending_entities: Dict = {},
+    flight_client: FlightAPIClient,
+    chat_history: Optional[List[Tuple[str, str]]] = None,
+    pending_entities: Optional[Dict] = None,
     aviationstack_client: Optional[AviationstackClient] = None,
 ) -> Tuple[str, Dict]:
     """Route user query to appropriate handler based on intent classification.
@@ -30,7 +35,7 @@ def route(
         query: User's input query.
         llm: LLM instance with chat(messages, stream=False) method.
         retriever: Retriever instance with retrieve(query) -> str method.
-        flight_client: Flight search client with search_flights(origin, dest, date, cabin, adults) method.
+        flight_client: FlightAPI client with search_flights(origin, destination, date, adults, cabin, currency) method.
         chat_history: List of (user, assistant) tuples for context.
         pending_entities: Entities from previous clarification turn (if any).
         aviationstack_client: Optional Aviationstack client for flight status queries.
@@ -42,6 +47,11 @@ def route(
           Empty dict {} if routing completed (flight search, policy, etc.).
     """
     try:
+        if chat_history is None:
+            chat_history = []
+        if pending_entities is None:
+            pending_entities = {}
+
         # Step 1: Classify intent
         intent_result = classify_intent(query, llm, chat_history)
         intent_type = intent_result.get("type", "policy")
@@ -83,10 +93,57 @@ def route(
         )
 
 
+def _retrieve_docs(retriever, query: str):
+    """Support both callable retrievers and retriever objects with retrieve()."""
+    if callable(retriever):
+        return retriever(query)
+
+    retrieve_fn = getattr(retriever, "retrieve", None)
+    if callable(retrieve_fn):
+        return retrieve_fn(query)
+
+    raise TypeError("Retriever must be callable or expose a callable retrieve(query) method.")
+
+
+def _retrieve_context_and_sources(retriever, query: str) -> tuple[str, list[dict]]:
+    result = _retrieve_docs(retriever, query)
+
+    if isinstance(result, tuple) and len(result) == 2:
+        context, sources = result
+        return str(context or ""), list(sources or [])
+
+    return _to_text_chunks(result), []
+
+
+def _to_text_chunks(chunks) -> str:
+    """Convert retriever outputs into a text block for context builder."""
+    if chunks is None:
+        return ""
+
+    if isinstance(chunks, str):
+        return chunks
+
+    if isinstance(chunks, list):
+        parts = []
+        for item in chunks:
+            if isinstance(item, str):
+                parts.append(item)
+                continue
+
+            page_content = getattr(item, "page_content", None)
+            if isinstance(page_content, str):
+                parts.append(page_content)
+            else:
+                parts.append(str(item))
+        return "\n\n".join(parts)
+
+    return str(chunks)
+
+
 def _handle_flight_search(
     query: str,
     llm,
-    flight_client,
+    flight_client: FlightAPIClient,
     retriever,
     chat_history: List[Tuple[str, str]],
     pending_entities: Dict,
@@ -97,7 +154,7 @@ def _handle_flight_search(
     Args:
         query: User's input query.
         llm: LLM instance.
-        flight_client: Amadeus flight search client.
+        flight_client: FlightAPI flight search client.
         retriever: RAG retriever for policy information.
         chat_history: Conversation history.
         pending_entities: Persisted entities from prior turn.
@@ -129,22 +186,42 @@ def _handle_flight_search(
         cabin_class = merged.get("cabin_class", "ECONOMY")
         adults = merged.get("adults", 1)
 
-        # Step B: Call Amadeus flight search API
-        raw_data = flight_client.search_flights(
+        # Step B: Call FlightAPI flight search API
+        cabin_map = {
+            "ECONOMY": "Economy",
+            "BUSINESS": "Business",
+            "FIRST": "First",
+            "PREMIUM_ECONOMY": "Economy",
+        }
+        cabin = cabin_map.get(cabin_class, "Economy")
+
+        raw = flight_client.search_flights(
             origin=origin,
             destination=destination,
             date=departure_date,
-            cabin=cabin_class,
             adults=adults,
+            cabin=cabin,
+            currency="INR",
         )
 
-        # Step C: Parse offers from raw Amadeus data
-        offers = parse_offers(raw_data)
+        if not raw:
+            return (
+                "I couldn't fetch live flight data right now. "
+                "You can check prices at MakeMyTrip or Goibibo. "
+                "I can still answer policy questions.",
+                {},
+            )
+
+        # Step C: Parse offers from raw FlightAPI data
+        offers = parse_flightapi_response(raw, cabin=cabin)
 
         if not offers:
             return (
-                f"No flights found from {origin} to {destination} on {departure_date}. "
-                f"Please try different dates or airports.",
+                "I couldn't find flights for that route and date. "
+                "Please try:\n"
+                "- Checking different dates\n"
+                "- Verifying the airport codes\n"
+                "- Searching directly on MakeMyTrip or Goibibo",
                 {},
             )
 
@@ -160,7 +237,7 @@ def _handle_flight_search(
         policy_keywords = ["baggage", "policy", "refund", "change", "cancellation"]
         if any(keyword in query.lower() for keyword in policy_keywords):
             try:
-                rag_chunks = retriever.retrieve(query)
+                rag_chunks = _to_text_chunks(_retrieve_docs(retriever, query))
             except Exception as e:
                 logger.warning(f"Failed to retrieve policies: {e}")
 
@@ -207,6 +284,12 @@ def _handle_flight_search(
         if table:
             final_response += "\n\n" + table
 
+        flight_source = (
+            "\n\n---\n**Source:** FlightAPI.io — "
+            f"live data fetched at {datetime.now().strftime('%H:%M')} IST"
+        )
+        final_response += flight_source
+
         return (final_response, {})
 
     except Exception as e:
@@ -230,7 +313,12 @@ def _handle_policy(query: str, llm, retriever) -> Tuple[str, Dict]:
     """
     try:
         # Retrieve relevant policy documents
-        rag_chunks = retriever.retrieve(query)
+        use_hyde = len(query.split()) < 8
+        rag_chunks, sources = hyde_retrieve(query, llm, retriever, use_hyde)
+        fallback, score = should_fallback(sources)
+
+        if fallback:
+            return (build_fallback_response(query, score), {})
 
         # Build context using context_builder
         context = build_context(
@@ -251,12 +339,14 @@ def _handle_policy(query: str, llm, retriever) -> Tuple[str, Dict]:
 
         messages = build_messages(system_prompt, context + "\n\nUser question: " + query)
         response = llm.chat(messages, stream=False)
-        response_text = str(response)
+        response_text = format_inline_citations(str(response), sources)
 
         return (response_text, {})
 
     except Exception as e:
         logger.error(f"Error in policy retrieval: {e}", exc_info=True)
+        if "Local Ollama model cannot run due to memory limits" in str(e):
+            return (str(e), {})
         return (
             "I couldn't retrieve the policy information at this time. Please try again.",
             {},

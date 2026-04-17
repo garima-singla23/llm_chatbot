@@ -14,7 +14,7 @@ from dataclasses import dataclass
 import requests
 from requests.exceptions import RequestException
 
-from utils.flight_parser import FlightOffer
+from utils.flightapi_parser import FlightOffer
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ def normalize_currency(
     """
     Normalize flight offer prices to target currency.
 
-    Amadeus already returns INR when currencyCode=INR is passed in the request,
+    FlightAPI can return INR directly when requested in search parameters,
     so this is mostly a passthrough. However, it fetches live exchange rates
     from Frankfurter API as a fallback for offers in other currencies.
 

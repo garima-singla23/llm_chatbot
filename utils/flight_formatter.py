@@ -8,7 +8,7 @@ and Gradio UI-friendly markdown tables.
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 
-from utils.flight_parser import FlightOffer
+from utils.flightapi_parser import FlightOffer
 
 
 def format_for_llm(offers: List[FlightOffer], query_context: str = "") -> str:
@@ -70,7 +70,7 @@ def format_for_llm(offers: List[FlightOffer], query_context: str = "") -> str:
         lines.append(f"Tags: {tags_str}")
         lines.append(f"Departs: {departure_time} | Arrives: {arrival_time}")
 
-    lines.append("\nSource: Amadeus GDS API (live)")
+    lines.append("\nSource: FlightAPI.io (live)")
 
     return "\n".join(lines)
 

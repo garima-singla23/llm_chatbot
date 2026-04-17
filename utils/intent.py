@@ -1,4 +1,11 @@
 import json
+import re
+
+
+_GREETING_RE = re.compile(
+    r"^\s*(hi+|hello+|hey+|good\s*(morning|afternoon|evening)|namaste|hola)\b[!.,\s]*$",
+    re.IGNORECASE,
+)
 
 
 def classify_intent(query: str, llm, chat_history: list = []) -> dict:
@@ -16,6 +23,10 @@ def classify_intent(query: str, llm, chat_history: list = []) -> dict:
 
     On any failure, defaults to {"type": "policy", "confidence": 0.0}
     """
+    # Fast path for greetings to avoid unnecessary model calls.
+    if _GREETING_RE.match(query or ""):
+        return {"type": "general", "confidence": 0.99}
+
     system_prompt = (
         "You are an intent classifier for an airline customer support chatbot. "
         "Classify the user's query into exactly one of these categories:\n"
