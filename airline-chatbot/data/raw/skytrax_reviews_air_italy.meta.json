@@ -1,0 +1,8 @@
+{
+  "airline": "air_italy",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 31,
+  "saved_rows": 10,
+  "converted_at": "2026-05-29T18:23:40.452566+00:00"
+}

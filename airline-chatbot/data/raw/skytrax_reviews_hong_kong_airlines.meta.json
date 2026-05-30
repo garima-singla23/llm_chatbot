@@ -1,0 +1,8 @@
+{
+  "airline": "hong_kong_airlines",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 146,
+  "saved_rows": 10,
+  "converted_at": "2026-05-29T18:23:42.881985+00:00"
+}

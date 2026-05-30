@@ -1,0 +1,8 @@
+{
+  "airline": "general",
+  "topic": "get_invoice",
+  "source_type": "huggingface",
+  "dataset_id": "bitext/Bitext-customer-support-llm-chatbot-training-dataset",
+  "row_count": 191,
+  "loaded_at": "2026-05-27T07:43:06.543050+00:00"
+}

@@ -1,0 +1,28 @@
+Airline: US-Bangla Airlines
+Review: Dhaka to Bangkok. Good service though it made delay while departing. Very good food. Staff were good. Price was a bit high when I purchased. No entertainment screen on board.
+Rating: 7.0/10
+
+---
+Airline: US-Bangla Airlines
+Review: Dhaka to Bangkok. Good service though it made delay while departing.. Very good food. Staff were good. Price was a bit high when I purchased. No entertainment screen on board.
+Rating: 7.0/10
+
+---
+Airline: US-Bangla Airlines
+Review: Cox's Bazar to Dhaka with US-Bangla Airlines. The check-in process was smooth. The plane arrived exactly on time. But had to refuel for 15mins. We were on a full family trip. The staff was friendly and helpful. The seats were a bit tight and narrow. Food was average.  Landing was smooth. We got our baggage in time. I don't know about others, but my experience was satisfactory.
+Rating: 7.0/10
+
+---
+Airline: US-Bangla Airlines
+Review: Sylhet to Dhaka. Absolutely awful probably the worst airline, very rude, very unprofessional, don’t know how they can be so rude towards customers. I was at Sylhet  at 11am and had a domestic flight at 2:05pm, we had to wait 5 hours. We ended up missing our international flight and they put us in a very nasty hotel.
+Rating: 1.0/10
+
+---
+Airline: US-Bangla Airlines
+Review: Dhaka to Jessore. It was really a bad experience when the plane started to take off and after a while there was problem with the flight’s fan or whatever there were some technical issues and then they stopped on emergency basis and later on after a while they started with the same plane though they told us to shift in a new one. After going a little further the plane again stopped at their runway due to the same problem. Then they shifted us to a new plane. The matter here is their unprofessionalism which is really disgraceful. I really would never like to fly with them again.
+Rating: 1.0/10
+
+---
+Airline: US-Bangla Airlines
+Review: Dhaka to Jessore. I find the name of this private airline in Bangladesh a bit funny. Other than that no complaints. Arrived at the domestic terminal in Dhaka 7 minutes before the scheduled morning departure due to being severely delayed due to road traffic. The check-in desk completed all formalities, rushed us through security, had a limo ready for us to escort me and my partner to the aircraft at the remote stand. The flight left after our boarding and exactly on time. I have never experienced this kind of dedication and professionalism with an airline. The flight to Jessore lasted 25 minutes onboard a clean and attractive Dash-8 Q400 and we were served a sandwich, cake and a water bottle by friendly and smiley flight attendants. The return flight to Dhaka a couple of days later was just as good but we made sure we arrived promptly for check-in this time. We were served a mini burger, cake and water bottle.
+Rating: 10.0/10

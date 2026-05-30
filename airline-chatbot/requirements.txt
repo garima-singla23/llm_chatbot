@@ -1,0 +1,17 @@
+langchain
+langchain-community
+langchain-openai
+faiss-cpu
+chromadb
+sentence-transformers
+rank-bm25
+unstructured[pdf]
+beautifulsoup4
+requests
+playwright
+streamlit
+openai
+python-dotenv
+pandas
+numpy
+tqdm

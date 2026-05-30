@@ -1,0 +1,8 @@
+{
+  "airline": "united_airlines",
+  "source_type": "kaggle",
+  "dataset_id": "crowdflower/twitter-airline-sentiment",
+  "original_rows": 3822,
+  "saved_rows": 10,
+  "converted_at": "2026-05-28T03:08:33.945785+00:00"
+}

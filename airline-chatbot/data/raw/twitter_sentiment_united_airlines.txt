@@ -1,0 +1,38 @@
+Customer query: @united Thanks for taking care of that MR!! Happy customer.
+Sentiment: positive
+
+---
+Customer query: @united still no refund or word via DM. Please resolve this issue as your Cancelled Flightled flight was useless to my assistant's trip.
+Sentiment: negative
+
+---
+Customer query: @united Delayed due to lack of crew and now delayed again because there's a long line for deicing... Still need to improve service #united
+Sentiment: negative
+
+---
+Customer query: @united thanks -- we filled it out. How's our luck with this? Is it common?
+Sentiment: positive
+
+---
+Customer query: @united Your ERI-ORD express connections are hugely popular .. now if only we could have an ERI-EWR hop! :)
+Sentiment: negative
+
+---
+Customer query: @united even on international flight Glasgow to the U.S.? Then what about orlando to Newark? All 90 mins?
+Sentiment: neutral
+
+---
+Customer query: @united you think you boarded flight AU1066 too early? I think so.
+Sentiment: negative
+
+---
+Customer query: @united I understand, but it's tough when there is no way to get to the airport w/o serious risk of an accident. It's a steep price.
+Sentiment: neutral
+
+---
+Customer query: @united Gate agent hooked me up with alternate flights. If you have a way to PREVENT the constant issues, that would rock.
+Sentiment: negative
+
+---
+Customer query: @united flying gla-mco in a few weeks. How long do we have to be at airport for before departure for both international and domestic? Ta
+Sentiment: neutral

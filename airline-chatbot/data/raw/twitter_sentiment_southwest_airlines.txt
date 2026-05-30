@@ -1,0 +1,38 @@
+Customer query: @SouthwestAir still waiting. Just hit one hour.
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir although I'm not happy you Cancelled Flighted my flight home tomorrow (phx to atl then dca) I am happy on how easy it was to rebook
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir Hello - been on hold for extremely long time. Have confirmation # &amp; can't get boarding pass. Have tried numerous times!!
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir I'm teaching new #travelers how to research, #budget &amp; #save for a trip today! http://t.co/Qll48r57ep
+Sentiment: neutral
+
+---
+Customer query: @SouthwestAir Very frustrated for the loooooong wait time to speak to a live person!!! Cannot get boarding pass for flight tomorrow!!
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir still no update text #2053 &amp; still no response to email fr1/5/2015 SR #256746438028. Feel like yr losing customer service/care
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir your agents were the ones who were rude and unhelpful and prompted my initial tweet. This is so easy to fix.
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir my wife had been in group A in prev. flight but got bumped for some reason.  Alone with two kids. At least put her in group A
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir my flight was delayed 4 hrs. I'm 5 months pregnant &amp; supposed to be caring for my mom whose in surgery now. Very upset.
+Sentiment: negative
+
+---
+Customer query: @SouthwestAir thank you so much completely made things right!
+Sentiment: positive

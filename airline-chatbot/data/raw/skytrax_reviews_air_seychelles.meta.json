@@ -1,0 +1,8 @@
+{
+  "airline": "air_seychelles",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 74,
+  "saved_rows": 10,
+  "converted_at": "2026-05-29T18:23:40.755122+00:00"
+}

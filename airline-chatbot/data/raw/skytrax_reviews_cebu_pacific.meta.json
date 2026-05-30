@@ -1,0 +1,8 @@
+{
+  "airline": "cebu_pacific",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 363,
+  "saved_rows": 10,
+  "converted_at": "2026-05-29T18:23:41.894669+00:00"
+}

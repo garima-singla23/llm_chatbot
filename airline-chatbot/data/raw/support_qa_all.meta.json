@@ -1,0 +1,8 @@
+{
+  "airline": "general",
+  "source_type": "kaggle",
+  "dataset_id": "bitext/bitext-gen-ai-chatbot-customer-support-dataset",
+  "original_rows": 300,
+  "saved_rows": 300,
+  "converted_at": "2026-05-29T18:24:09.223776+00:00"
+}

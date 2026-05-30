@@ -1,0 +1,8 @@
+{
+  "airline": "up_by_el_al",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 4,
+  "saved_rows": 3,
+  "converted_at": "2026-05-29T18:23:46.051687+00:00"
+}

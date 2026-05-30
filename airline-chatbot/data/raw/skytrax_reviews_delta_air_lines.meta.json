@@ -1,0 +1,8 @@
+{
+  "airline": "delta_air_lines",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 2770,
+  "saved_rows": 10,
+  "converted_at": "2026-05-29T18:23:42.148922+00:00"
+}

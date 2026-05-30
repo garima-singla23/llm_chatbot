@@ -1,0 +1,8 @@
+{
+  "airline": "shandong_airlines",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 24,
+  "saved_rows": 10,
+  "converted_at": "2026-05-29T18:23:45.027867+00:00"
+}

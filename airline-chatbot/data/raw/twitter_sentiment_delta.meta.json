@@ -1,0 +1,8 @@
+{
+  "airline": "delta",
+  "source_type": "kaggle",
+  "dataset_id": "crowdflower/twitter-airline-sentiment",
+  "original_rows": 2222,
+  "saved_rows": 10,
+  "converted_at": "2026-05-28T03:08:33.891788+00:00"
+}

@@ -1,0 +1,8 @@
+{
+  "airline": "pal_express",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 9,
+  "saved_rows": 9,
+  "converted_at": "2026-05-29T18:23:44.386833+00:00"
+}

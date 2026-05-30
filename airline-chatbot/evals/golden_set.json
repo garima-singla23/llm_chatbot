@@ -1,0 +1,152 @@
+[
+  {
+    "question": "What is the carry-on baggage allowance?",
+    "expected_keywords": ["carry-on", "baggage", "kg", "inch"],
+    "airline": null,
+    "topic": "baggage"
+  },
+  {
+    "question": "How much excess baggage fee does IndiGo charge?",
+    "expected_keywords": ["excess", "baggage", "fee", "per kg"],
+    "airline": "indigo",
+    "topic": "baggage"
+  },
+  {
+    "question": "What is Air India's policy on checked baggage?",
+    "expected_keywords": ["checked", "baggage", "kg", "Air India"],
+    "airline": "air_india",
+    "topic": "baggage"
+  },
+  {
+    "question": "Can I bring a pet on SpiceJet?",
+    "expected_keywords": ["pet", "animal", "baggage", "allowed"],
+    "airline": "spicejet",
+    "topic": "baggage"
+  },
+  {
+    "question": "What is Vistara's refund policy for cancellations?",
+    "expected_keywords": ["refund", "cancellation", "policy", "Vistara"],
+    "airline": "vistara",
+    "topic": "refund"
+  },
+  {
+    "question": "How long does it take to get a refund after cancelling with IndiGo?",
+    "expected_keywords": ["refund", "days", "process"],
+    "airline": "indigo",
+    "topic": "refund"
+  },
+  {
+    "question": "What documents do I need for international flight check-in?",
+    "expected_keywords": ["passport", "documents", "visa", "international"],
+    "airline": null,
+    "topic": "check_in"
+  },
+  {
+    "question": "How early should I arrive for domestic flight check-in?",
+    "expected_keywords": ["check-in", "arrive", "minutes", "domestic"],
+    "airline": null,
+    "topic": "check_in"
+  },
+  {
+    "question": "Can I do web check-in for Air India flights?",
+    "expected_keywords": ["web", "check-in", "online"],
+    "airline": "air_india",
+    "topic": "check_in"
+  },
+  {
+    "question": "What is SpiceJet's web check-in window?",
+    "expected_keywords": ["check-in", "hours", "web"],
+    "airline": "spicejet",
+    "topic": "check_in"
+  },
+  {
+    "question": "Can I change my seat after booking with Vistara?",
+    "expected_keywords": ["seat", "change", "Select seat", "Vistara"],
+    "airline": "vistara",
+    "topic": "seat"
+  },
+  {
+    "question": "Do I need a visa for flights to Thailand?",
+    "expected_keywords": ["visa", "Thailand", "required"],
+    "airline": null,
+    "topic": "visa"
+  },
+  {
+    "question": "What visa do I need for a UK trip starting from India?",
+    "expected_keywords": ["visa", "UK", "passport"],
+    "airline": null,
+    "topic": "visa"
+  },
+  {
+    "question": "Are meals provided on IndiGo flights?",
+    "expected_keywords": ["meal", "food", "provided", "included"],
+    "airline": "indigo",
+    "topic": "general"
+  },
+  {
+    "question": "What happens if my flight is delayed by 2 hours?",
+    "expected_keywords": ["delay", "compensation", "hours", "policy"],
+    "airline": null,
+    "topic": "general"
+  },
+  {
+    "question": "What is Air India's compensation for flight delays?",
+    "expected_keywords": ["compensation", "delay", "rupees", "Air India"],
+    "airline": "air_india",
+    "topic": "general"
+  },
+  {
+    "question": "How do I check my flight status for SpiceJet?",
+    "expected_keywords": ["flight status", "check", "PNR", "SpiceJet"],
+    "airline": "spicejet",
+    "topic": "general"
+  },
+  {
+    "question": "Can I cancel a non-refundable ticket with Vistara?",
+    "expected_keywords": ["cancel", "refund", "ticket"],
+    "airline": "vistara",
+    "topic": "refund"
+  },
+  {
+    "question": "What is the baggage allowance for senior citizens on IndiGo?",
+    "expected_keywords": ["senior", "baggage", "allowance", "kg"],
+    "airline": "indigo",
+    "topic": "baggage"
+  },
+  {
+    "question": "Do I get a refund if I miss my flight?",
+    "expected_keywords": ["refund", "miss", "flight", "policy"],
+    "airline": null,
+    "topic": "refund"
+  },
+  {
+    "question": "How do I select my preferred seat on Air India?",
+    "expected_keywords": ["seat", "select", "preference", "Air India"],
+    "airline": "air_india",
+    "topic": "seat"
+  },
+  {
+    "question": "What is the minimum age for unaccompanied minors on SpiceJet?",
+    "expected_keywords": ["minor", "age", "unaccompanied"],
+    "airline": "spicejet",
+    "topic": "general"
+  },
+  {
+    "question": "Can I bring my bicycle as checked baggage?",
+    "expected_keywords": ["bicycle", "baggage", "sports", "allowed"],
+    "airline": null,
+    "topic": "baggage"
+  },
+  {
+    "question": "What documents do visa-free countries require for entry?",
+    "expected_keywords": ["visa-free", "documents", "passport", "entry"],
+    "airline": null,
+    "topic": "visa"
+  },
+  {
+    "question": "How do I update my contact information after booking with Vistara?",
+    "expected_keywords": ["contact", "booking", "update"],
+    "airline": "vistara",
+    "topic": "general"
+  }
+]

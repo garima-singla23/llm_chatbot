@@ -1,0 +1,8 @@
+{
+  "airline": "general",
+  "topic": "delivery_period",
+  "source_type": "huggingface",
+  "dataset_id": "bitext/Bitext-customer-support-llm-chatbot-training-dataset",
+  "row_count": 297,
+  "loaded_at": "2026-05-27T07:43:06.502045+00:00"
+}

@@ -1,0 +1,8 @@
+{
+  "airline": "beijing_capital_airlines",
+  "source_type": "kaggle",
+  "dataset_id": "joelljungstrom/128k-airline-reviews",
+  "original_rows": 5,
+  "saved_rows": 5,
+  "converted_at": "2026-05-29T18:23:41.455391+00:00"
+}

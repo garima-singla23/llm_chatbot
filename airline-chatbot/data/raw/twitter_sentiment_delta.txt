@@ -1,0 +1,39 @@
+Customer query: @JetBlue Yesterday on my way from EWR to FLL just after take-off. :)
+#wheelsup #JetBlueSoFly http://t.co/9xkiy0Kq2j
+Sentiment: positive
+
+---
+Customer query: @JetBlue I hope so because I fly very often and would hate to change airlines.
+Sentiment: neutral
+
+---
+Customer query: @JetBlue flight 1041 to Savannah, GA
+Sentiment: neutral
+
+---
+Customer query: @JetBlue They weren't on any flight, they just came Late Flight. Your JetBlue employee just informed us!
+Sentiment: negative
+
+---
+Customer query: @JetBlue everyone is here but our pilots are no where to be found and my last flight the plane was dirty that I had to clean my area &amp; seat!
+Sentiment: negative
+
+---
+Customer query: @JetBlue update on Flight 462 would be appreciated when you have time, thanks
+Sentiment: neutral
+
+---
+Customer query: @JetBlue check DM please :)
+Sentiment: neutral
+
+---
+Customer query: @JetBlue Hey guys, why did my last flight earn me 0 pts? http://t.co/1syWlmTZek
+Sentiment: negative
+
+---
+Customer query: @JetBlue 2 aisles of empty #evermoreroom seats and we can't move bc we didn't pay?! #nonsense #Waste #JetBlue #jetbluebos #cheap
+Sentiment: negative
+
+---
+Customer query: @JetBlue ’s Marty St. George really has zero clue. How does he still have a job? #nobaggagefees http://t.co/tjDzaMHPEw
+Sentiment: negative
