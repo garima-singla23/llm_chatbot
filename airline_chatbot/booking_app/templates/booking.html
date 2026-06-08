@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AirAssist Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body{background:#0f172a;color:#e2e8f0;min-height:100vh}
+      .shell{max-width:1120px;margin:0 auto}
+      .card-dark{background:#1e293b;border:1px solid rgba(148,163,184,.14);border-radius:24px;box-shadow:0 20px 60px rgba(2,6,23,.45)}
+      .accent{color:#3b82f6}
+      .price{background:#052e16;color:#86efac;border:1px solid rgba(34,197,94,.35)}
+      .muted{color:#94a3b8}
+      .brand-dot{width:12px;height:12px;border-radius:999px;background:linear-gradient(135deg,#3b82f6,#38bdf8)}
+    </style>
+  </head>
+  <body>
+    <div class="shell px-3 py-4 py-md-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-2 fw-semibold fs-4"><span class="brand-dot"></span> ✈ AirAssist</div>
+        <div class="badge rounded-pill px-3 py-2 text-bg-primary">Secure Booking</div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="card-dark p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge text-bg-secondary">{{ flight.airline }} {{ flight.flight_no }}</span>
+              <span class="badge text-bg-dark border">Flight Summary</span>
+            </div>
+            <div class="mb-3 fs-5 fw-semibold">{{ flight.origin }} ──✈──&gt; {{ flight.destination }}</div>
+            <div class="row g-3 small">
+              <div class="col-12">Departure: <strong>{{ flight.departure }}</strong> | Arrival: <strong>{{ flight.arrival }}</strong></div>
+              <div class="col-12">Gate: <strong>{{ flight.gate }}</strong> | Terminal: <strong>{{ flight.terminal }}</strong></div>
+              <div class="col-12">Date: <strong>{{ flight.date }}</strong></div>
+            </div>
+            <div class="price rounded-4 p-3 mt-4">
+              <div class="small text-uppercase opacity-75">Price</div>
+              <div class="display-6 fw-bold mb-0">₹{{ flight.price }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="card-dark p-4">
+            <h2 class="h4 mb-4">Passenger Details</h2>
+            <form id="passengerForm">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Full Name</label>
+                  <input class="form-control form-control-lg bg-dark text-white border-secondary" name="name" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email Address</label>
+                  <input class="form-control bg-dark text-white border-secondary" name="email" type="email" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone Number</label>
+                  <input class="form-control bg-dark text-white border-secondary" name="phone" type="tel" pattern="[0-9]{10}" required placeholder="10 digits">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Age</label>
+                  <input class="form-control bg-dark text-white border-secondary" name="age" type="number" min="1" max="120">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Gender</label>
+                  <select class="form-select bg-dark text-white border-secondary" name="gender">
+                    <option>Male</option><option>Female</option><option>Other</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Seat Preference</label>
+                  <select class="form-select bg-dark text-white border-secondary" name="seat_pref">
+                    <option>Window</option><option>Aisle</option><option>Middle</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Meal Preference</label>
+                  <select class="form-select bg-dark text-white border-secondary" name="meal_pref">
+                    <option>Veg</option><option>Non-veg</option><option>Vegan</option><option>Jain</option>
+                  </select>
+                </div>
+              </div>
+              <button id="payBtn" class="btn btn-primary btn-lg w-100 mt-4">🔒 Proceed to Payment ₹{{ flight.price }}</button>
+            </form>
+
+            <details class="mt-4">
+              <summary class="muted">Test mode card details</summary>
+              <div class="mt-2 small muted">Card: 4111 1111 1111 1111 | Expiry: 12/28 | CVV: 123</div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      document.getElementById("payBtn").onclick = async function(e) {
+        e.preventDefault()
+        const form = document.getElementById("passengerForm")
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+
+        const formData = new FormData(form)
+        const resp = await fetch("/initiate-payment", {method:"POST", body:formData})
+        const data = await resp.json()
+        if (data.error) { alert("Error: " + data.error); return; }
+
+        const rzp = new Razorpay({
+          key: data.key,
+          amount: data.amount,
+          currency: "INR",
+          name: "AirAssist",
+          description: "Flight Booking",
+          order_id: data.order_id,
+          prefill: {name: data.name, email: data.email, contact: data.phone},
+          theme: {color: "#3b82f6"},
+          handler: function(response) {
+            const f = document.createElement("form")
+            f.method = "POST"
+            f.action = "/payment-success"
+            for (const [k,v] of Object.entries(response)) {
+              const i = document.createElement("input")
+              i.type = "hidden"; i.name = k; i.value = v
+              f.appendChild(i)
+            }
+            document.body.appendChild(f)
+            f.submit()
+          },
+          modal: {ondismiss: function(){alert("Payment cancelled. Try again.")}}
+        })
+        rzp.open()
+      }
+    </script>
+  </body>
+</html>

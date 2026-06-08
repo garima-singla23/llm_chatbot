@@ -1,0 +1,99 @@
+An airline ticket is a document or electronic record, issued by an airline or a travel agency, that confirms that an individual is entitled to a seat on a flight on an aircraft. The airline ticket may be one of two types: a paper ticket, which comprises coupons or vouchers; and an electronic ticket (commonly referred to as an e-ticket).
+The ticket, in either form, is required to obtain a boarding pass during check-in at the airport. Then with the boarding pass and the attached ticket, the passenger is allowed to board the aircraft.
+
+
+== Details ==
+Regardless of the type, tickets contain the following information:
+
+The passenger's name
+The issuing airline
+A ticket number, including the airline's three-digit code at the start of the number
+The cities between which the ticket is valid for travel
+Flight for which the ticket is valid (unless the ticket is "open")
+Baggage allowance. (Not always visible on a printout but recorded electronically for the airline)
+Fare. (Not always visible on a printout but recorded electronically for the airline)
+Taxes. (Not always visible on a printout but recorded electronically for the airline)
+The "Fare Basis", an alphabetic or alphanumeric code that identifies the fare
+Restrictions on changes and refunds (not always shown in detail, but referred to)
+Dates for which the ticket is valid
+"Form of payment", i.e. details of how the ticket was paid for, which will in turn affect how it would be refunded.
+The exchange rate used to calculate any international parts of the fare and tax
+A "Fare Construction" or "Linear" showing the breakdown of the total fare
+Times on airline tickets are generally for the local time zone where the flight will be at that moment.
+A ticket is generally only good on the airline for which it was purchased. However, an airline can endorse the ticket, so that it may be accepted by other airlines, sometimes on a standby basis or with a confirmed seat. Usually, the ticket is for a specific flight. It is also possible to purchase an 'open' ticket, which allows travel on any flight between the destinations listed on the ticket. The cost of this is greater than a ticket for a specific flight. Some tickets are refundable. However, the lower-cost tickets are usually not refundable and may carry many additional restrictions.
+The carrier (airline) is represented by a standardized two-character alphanumeric code. In the example above, Thai Airways is TG. The departure and destination cities are represented by International Air Transport Association airport codes. In the example above, Munich is MUC and Bangkok is BKK. The International Air Transport Association is the standard-setting organization.
+Only one passenger can use a ticket. If multiple passengers are traveling together, the tickets are linked together by the same record locator or reservation number, which are assigned if the tickets were purchased at the same time. If not, most airlines can cross-reference the tickets together in their reservation systems. This allows all members in a party to be processed in a group, allowing seat assignments to be together (if available at the time of the assignment).
+
+
+== Issuing an air ticket ==
+
+A revenue passenger on an airline must hold a valid issued ticket. In order for a ticket to be issued, there are two distinct processes; both of these are required:
+
+
+=== Reservation ===
+A reservation for an itinerary is made in the airline system, either directly by the passenger or by an agent. The itinerary includes all the above details needed for the issuance of an air ticket, except the ticket number.
+When the reservation is made, a passenger name record (PNR) will be created which is used to manage the reservation and check in. There can be multiple passengers in a single passenger name record provided that all passengers have the same itinerary and fare type.
+
+
+=== Issuance ===
+Having a reservation does not itself entitle the passenger to travel. Only when the airline receives the payment or a passenger redeems miles/points, a ticket is issued which is linked to the reservation and allows the passenger to travel.
+Historically, reservation and payment are separate steps, with the allowed time between booking and payment being defined in the fare rules when the reservation is made. With modern booking systems, it has become more common to require immediate payment before a reservation is made.
+Each passenger must have their own air ticket, as shown by an individual ticket number, even when the reservations are linked by a single PNR.
+
+
+== Paper tickets ==
+
+For most of the history of commercial aviation, tickets for air travel were printed on paper.  In time, the form of the paper ticket was standardized, with particular information shown in particular places on the ticket coupon. The Airlines Reporting Corporation (ARC) printed many of the standard ticket forms used by airlines and travel agents, and paper tickets were sometimes known as "ARC coupons" as a result.
+The tickets could be written by hand, or typed or printed. The individual sheets comprising the ticket, one per flight segment, could then be stapled together into a booklet with a cover and often with other documents, such as legal notices to the traveler.  The ticket doubled as the official baggage check under the Warsaw Convention and Hague Protocol (see photo).
+
+
+=== Resale ===
+When paper tickets were still frequently used, some travellers resold their (person-specific) tickets to other travellers (often at discount prices) when their travel plans changed. The seller would then accompany the buyer to the airport at the time of departure. The original owner would check in under his own name, and would check in the buyer's baggage. The buyer then boarded the airplane. However, since nowadays most airlines check identification on boarding, this procedure is rarely functional. Using another person's ticket is also illegal in many jurisdictions.
+
+
+=== Replacement of paper tickets ===
+IATA announced that as of June 1, 2008, IATA-member airlines would no longer issue any paper tickets.
+
+
+== Modification and cancellation ==
+Airline tickets can be modified or cancelled by the traveler subject to terms, conditions and sometimes fees imposed by the carrier.
+In many jurisdictions, the traveler has a right to free modification or cancellation during the period immediately after purchase:
+
+In the United States the traveler is entitled to a free reimbursement within 24 hours of purchase for every flight taking off or landing in the country, except if booked via a travel agency.
+In Colombia the same right applies for a period of 5 days after purchase.
+In the European Union the law does not impose any free reimbursement but rights to free reimbursement similar to those in the United States are acknowledged by certain airlines:
+In France, the 24-hour free reimbursement right is applied by Air France whereas EasyJet charges a cancellation fee and Ryanair allows only minor changes for free.
+
+
+== Overbooking ==
+Most airlines overbook their flights, which means that they sell more tickets than the flight can carry.
+If more ticketholders arrive at the airport than the plane can carry, the airline will refuse to board some passengers (colloquially known as "bumping" them) and provide them compensation based on the regulations that apply to that flight. Usually, in this scenario, a carrier will ask if there are any passengers willing to volunteer to be "bumped" before involuntarily refusing to board passengers. If there are volunteers, the airline will negotiate compensation with those passengers, usually in the form of vouchers good towards future flights.
+
+
+== Further steps ==
+After issuance, the passenger must follow two more procedures to obtain the right to take the flight: reconfirmation and check-in.
+
+
+=== Reconfirmation ===
+
+Several airlines require the ticketholder to reconfirm their reservation, that is, they must call the airline and tell that they still intend to take the reserved flight. Reconfirmation must be done within a specified range of time before each flight, twice for a roundtrip, for example. Failing to reconfirm may result in their reservations being cancelled.
+
+
+=== Check-in ===
+
+To board the aircraft, an airline ticket is not sufficient. The passenger needs to check-in and obtain a boarding pass, a ticket-like form but is not called "ticket" in this industry.
+
+
+== See also ==
+Airline consolidator
+Computer reservation system
+Miscellaneous charges order
+Variable pricing
+
+
+== Notes ==
+
+
+== External links ==
+ The dictionary definition of paper ticket at Wiktionary
+ Media related to Air tickets at Wikimedia Commons
