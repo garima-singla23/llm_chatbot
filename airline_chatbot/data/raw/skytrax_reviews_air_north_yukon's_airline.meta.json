@@ -1,8 +1,0 @@
-{
-  "airline": "air_north_yukon's_airline",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 3,
-  "saved_rows": 3,
-  "converted_at": "2026-05-29T18:23:40.626683+00:00"
-}

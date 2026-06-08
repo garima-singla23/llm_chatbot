@@ -1,8 +1,0 @@
-{
-  "airline": "kish_airlines",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 3,
-  "saved_rows": 3,
-  "converted_at": "2026-05-29T18:23:43.384125+00:00"
-}

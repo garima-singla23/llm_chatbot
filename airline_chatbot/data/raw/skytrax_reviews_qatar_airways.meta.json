@@ -1,8 +1,0 @@
-{
-  "airline": "qatar_airways",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 2196,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:44.661527+00:00"
-}

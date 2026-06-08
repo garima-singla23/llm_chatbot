@@ -1,8 +1,0 @@
-{
-  "airline": "luxair",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 86,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:43.676140+00:00"
-}

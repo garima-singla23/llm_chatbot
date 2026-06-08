@@ -1,8 +1,0 @@
-{
-  "airline": "air_france",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 1245,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:40.378592+00:00"
-}

@@ -1,8 +1,0 @@
-{
-  "airline": "tame_l\u00ednea_a\u00e9rea_del_ecuador",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 12,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:45.740481+00:00"
-}

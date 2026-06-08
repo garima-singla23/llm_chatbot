@@ -1,8 +1,0 @@
-{
-  "airline": "jetstar_japan",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 38,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:43.221150+00:00"
-}

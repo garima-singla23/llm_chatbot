@@ -1,8 +1,0 @@
-{
-  "airline": "svg_air",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 1,
-  "saved_rows": 1,
-  "converted_at": "2026-05-29T18:23:44.905680+00:00"
-}

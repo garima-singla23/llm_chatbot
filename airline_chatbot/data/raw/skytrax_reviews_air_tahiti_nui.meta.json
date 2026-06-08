@@ -1,8 +1,0 @@
-{
-  "airline": "air_tahiti_nui",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 109,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:40.769233+00:00"
-}

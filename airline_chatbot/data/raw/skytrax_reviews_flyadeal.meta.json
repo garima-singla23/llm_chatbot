@@ -1,8 +1,0 @@
-{
-  "airline": "flyadeal",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 19,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:46.664379+00:00"
-}

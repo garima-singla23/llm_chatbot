@@ -1,8 +1,0 @@
-{
-  "airline": "general",
-  "source_url": "https://www.airportsindia.com/passenger-information",
-  "source_type": "playwright",
-  "topic": "airport",
-  "scraped_at": "2026-05-27T06:28:16.948591+00:00",
-  "filename": "aai_passenger_info"
-}

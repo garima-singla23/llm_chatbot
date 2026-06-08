@@ -1,8 +1,0 @@
-{
-  "airline": "tigerair_taiwan",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 7,
-  "saved_rows": 7,
-  "converted_at": "2026-05-29T18:23:45.922749+00:00"
-}

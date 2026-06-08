@@ -1,8 +1,0 @@
-{
-  "airline": "wow_air",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 579,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:46.397256+00:00"
-}

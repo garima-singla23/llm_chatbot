@@ -1,8 +1,0 @@
-{
-  "airline": "virgin_america",
-  "source_type": "kaggle",
-  "dataset_id": "crowdflower/twitter-airline-sentiment",
-  "original_rows": 504,
-  "saved_rows": 10,
-  "converted_at": "2026-05-28T03:08:33.959786+00:00"
-}

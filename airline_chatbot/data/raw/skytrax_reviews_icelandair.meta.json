@@ -1,8 +1,0 @@
-{
-  "airline": "icelandair",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 662,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:42.937539+00:00"
-}

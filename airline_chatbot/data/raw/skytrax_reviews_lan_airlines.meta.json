@@ -1,8 +1,0 @@
-{
-  "airline": "lan_airlines",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 332,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:43.438666+00:00"
-}

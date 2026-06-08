@@ -1,8 +1,0 @@
-{
-  "airline": "tigerair_australia",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 506,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:45.911944+00:00"
-}

@@ -1,8 +1,0 @@
-{
-  "airline": "sata_international",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 109,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:44.878181+00:00"
-}

@@ -1,8 +1,0 @@
-{
-  "airline": "flysafair",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 107,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:42.570743+00:00"
-}

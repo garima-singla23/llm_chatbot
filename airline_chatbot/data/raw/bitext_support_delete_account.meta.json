@@ -1,8 +1,0 @@
-{
-  "airline": "general",
-  "topic": "delete_account",
-  "source_type": "huggingface",
-  "dataset_id": "bitext/Bitext-customer-support-llm-chatbot-training-dataset",
-  "row_count": 300,
-  "loaded_at": "2026-05-27T07:43:06.455046+00:00"
-}

@@ -1,8 +1,0 @@
-Airline: Sun-Air
-Review: ✅ , |  One of the best flights I have been on between Oslo and Billund. I didn't know that this kind of service still exsisted. Excellent food and service. I know it cost a bit more but it is well spent money. I do recommend this airline which operates flights on behalf of British Airways.
-Rating: 10.0/10
-
----
-Airline: Sun-Air
-Review: Gothenburg to Cambridge with Sun-Air (a franchise partner of British Airways,). Aircraft are painted in British Airways livery and operate under BA flight numbers. The flight was only half full making the 32 seat Dornier more like a private jet than a small airliner. Full meal and bar service on this 2 hour flight. Crew very good.
-Rating: 10.0/10

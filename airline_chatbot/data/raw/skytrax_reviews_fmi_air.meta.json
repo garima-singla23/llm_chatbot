@@ -1,8 +1,0 @@
-{
-  "airline": "fmi_air",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 2,
-  "saved_rows": 2,
-  "converted_at": "2026-05-29T18:23:42.464166+00:00"
-}

@@ -1,8 +1,0 @@
-{
-  "airline": "air_zimbabwe",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 24,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:40.823934+00:00"
-}

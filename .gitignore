@@ -59,3 +59,25 @@ airline-chatbot/vectorstore/
 # Temporary files
 *.tmp
 *.bak
+
+*.egg-info/
+
+# Environment
+.env
+
+# Large data files — regenerate, don't commit
+data/
+airline_chatbot/data/kaggle_raw/
+airline_chatbot/data/raw/
+airline_chatbot/data/processed/
+airline_chatbot/data/vector_store/
+*.csv
+*.faiss
+*.pkl
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+.DS_Store

@@ -1,8 +1,0 @@
-{
-  "airline": "easyfly",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 7,
-  "saved_rows": 6,
-  "converted_at": "2026-05-29T18:23:42.267472+00:00"
-}

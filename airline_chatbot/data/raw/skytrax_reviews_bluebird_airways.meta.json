@@ -1,8 +1,0 @@
-{
-  "airline": "bluebird_airways",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 6,
-  "saved_rows": 6,
-  "converted_at": "2026-05-29T18:23:41.590477+00:00"
-}

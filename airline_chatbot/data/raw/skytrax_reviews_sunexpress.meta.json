@@ -1,8 +1,0 @@
-{
-  "airline": "sunexpress",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 59,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:45.453421+00:00"
-}

@@ -1,8 +1,0 @@
-{
-  "airline": "avianca_brazil",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 22,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:41.270871+00:00"
-}

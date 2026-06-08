@@ -1,8 +1,0 @@
-{
-  "airline": "sas_scandinavian",
-  "source_type": "kaggle",
-  "dataset_id": "joelljungstrom/128k-airline-reviews",
-  "original_rows": 844,
-  "saved_rows": 10,
-  "converted_at": "2026-05-29T18:23:44.853208+00:00"
-}
