@@ -323,3 +323,31 @@ user_input = st.chat_input("Ask me about flights, baggage, refunds...")
 if user_input:
 	submit_message(user_input)
 
+# Add to app.py — Phase 3 additions (do NOT remove Phase 1/2 code)
+
+# 1. Start the background scheduler when app loads
+from proactive.scheduler import start_scheduler
+if "scheduler_started" not in st.session_state:
+    start_scheduler()
+    st.session_state.scheduler_started = True
+
+# 2. Add risk score to flight search results
+# After showing flight results, add:
+if st.session_state.get("last_flights"):
+    with st.expander("⚡ Travel Risk Score"):
+        for f in st.session_state.last_flights[:1]:  # show for cheapest
+            from proactive.delay_predictor import predict_delay
+            risk = predict_delay(
+                f["airline"], f["origin"], f["destination"], f["departure"]
+            )
+            col1, col2, col3 = st.columns(3)
+            col1.metric("On-time Probability",
+                        f"{risk['on_time_probability']}%")
+            col2.metric("Risk Level", risk["risk_level"])
+            col3.metric("Delay Risk", f"{risk['delay_probability']}%")
+            st.info(f"💡 {risk['recommendation']}")
+
+# 3. Add quick links to new pages in sidebar
+st.sidebar.divider()
+st.sidebar.page_link("pages/1_Analytics.py", label="Analytics Dashboard")
+st.sidebar.page_link("pages/2_My_Bookings.py", label="My Bookings")

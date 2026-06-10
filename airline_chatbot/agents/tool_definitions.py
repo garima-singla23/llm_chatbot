@@ -13,6 +13,7 @@ import re
 import uuid
 from urllib.parse import urlencode
 from typing import Dict, List, Optional
+from proactive.delay_predictor import predict_delay
 
 from booking.booking_engine import BOOKINGS_DB
 
@@ -458,4 +459,29 @@ TOOL_REGISTRY = {
     "calculate_refund": calculate_refund,
     "track_baggage": track_baggage,
     "file_baggage_claim": file_baggage_claim,
+}
+
+
+def get_travel_risk_score(airline: str, origin: str,
+                           destination: str, departure: str) -> dict:
+    """Get travel risk score for a flight."""
+    return predict_delay(airline, origin, destination, departure)
+
+{
+    "type": "function",
+    "function": {
+        "name": "get_travel_risk_score",
+        "description": "Get delay probability and risk score for a flight",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "airline": {"type": "string", "description": "Airline name"},
+                "origin": {"type": "string", "description": "Origin city"},
+                "destination": {"type": "string", "description": "Destination city"},
+                "departure": {"type": "string", "description": "Departure time HH:MM"},
+            },
+            "required": ["airline", "origin", "destination", "departure"],
+            "additionalProperties": False,
+        },
+    },
 }
