@@ -1,83 +1,26 @@
-# Environment variables
-.env
-*.env
-
-# Python virtual environments
-.venv/
-venv/
-env/
-
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
-
-# VS Code
-.vscode/
-
-# JetBrains IDEs
-.idea/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# Build artifacts
-build/
-dist/
-*.egg-info/
-
-# Jupyter
-.ipynb_checkpoints/
-
-# Test cache
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Model files
-*.pt
-*.pth
-*.ckpt
-*.h5
-
-# Data folders (IMPORTANT)
-airline-chatbot/data/
-
-# If you want to keep processed data but ignore raw data instead,
-# comment the above line and use:
-airline-chatbot/data/raw/
-airline-chatbot/data/kaggle_raw/
-
-# Chroma / Vector DB
-airline-chatbot/chroma_db/
-airline-chatbot/vectorstore/
-
-# Temporary files
-*.tmp
-*.bak
-
-*.egg-info/
-
-# Environment
-.env
-
-# Large data files — regenerate, don't commit
+# Data
 data/
-airline_chatbot/data/kaggle_raw/
-airline_chatbot/data/raw/
-airline_chatbot/data/processed/
-airline_chatbot/data/vector_store/
+
+# Vector stores
+chroma_db/
+vectorstore/
+
+# Generated files
+*.pdf
 *.csv
 *.faiss
 *.pkl
 *.db
 *.sqlite
 
+# Environment
+.env
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
 # IDE
 .vscode/
 .idea/
-.DS_Store

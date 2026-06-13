@@ -95,7 +95,7 @@ def build_all():
 			p.stem.split("_")[-1] for p in base.glob("*.txt")
 		]
 		# generate_synthetic accepts list of airlines or will generate for defaults
-		generated = generate_synthetic(airlines=airlines)
+		generated = generate_synthetic(output_dir="data/raw")
 		stats["synthetic"]["files"] = len([p for p in generated if p.endswith(".txt")])
 	except Exception as e:
 		print("Synthetic generation failed or not available:", e)

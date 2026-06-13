@@ -1,244 +1,227 @@
-# SKYASSIST — Airline Policy Chatbot (RAG + Agentic, Phase 1)
+<div align="center">
+  AirAssist — AI Airline Travel Concierge
 
-A production-style AI chatbot that answers baggage, refund, and check-in questions for 4 Indian airlines — without ever confusing one airline's policy with another's. Built from scratch with a full retrieval pipeline, typed memory, intent routing, and a mock booking engine.
+**A 3-phase production-style AI system for airline travel — answers policy questions, executes real bookings, and proactively assists travellers.**
 
-> **Status:** Phase 1 complete · Phase 2 (agentic) in progress
+[Architecture](#architecture) · [Evaluation](#evaluation) · [Quick Start](#quick-start) · [Tech Stack](#tech-stack)
 
----
-
-## 📸 Demo
-
-### Policy Q&A — Cross-airline accuracy
-<!-- SCREENSHOT 1: Show a policy question answered (e.g. "What is IndiGo's baggage allowance on domestic routes?") with the airline filter visible -->
-![Policy Q&A](screenshots/policy_qa.png)
-
-### Flight Search + Booking
-<!-- SCREENSHOT 2: Show the booking flow — user asks to search/book a flight in plain English, bot responds with options -->
-![Booking Flow](screenshots/booking_flow.png)
-
-### Context-Aware Follow-ups
-<!-- SCREENSHOT 3: Show a multi-turn conversation where a follow-up like "what about the window seat?" works correctly -->
-![Multi-turn Memory](screenshots/memory_context.png)
+</div>
 
 ---
 
-## What It Does
+## What This Is
 
-| Capability | Detail |
-|---|---|
-| Policy Q&A | Baggage, refund, check-in, visa, seat, meal, delay — for IndiGo, Air India, SpiceJet, Vistara |
-| Cross-airline isolation | Metadata-filtered retrieval prevents IndiGo rules from bleeding into Air India answers |
-| Mock flight booking | Search and book in plain English via a structured booking engine |
-| Context memory | Remembers conversation history, user preferences (seat, meal, airline), and active booking state across turns |
-| Intent routing | Every query is classified into 1 of 9 intents before any chain runs — FAQ and booking flows are fully separated |
+Most airline chatbots break the moment you ask anything unexpected. AirAssist is built across three phases that transform a passive FAQ responder into a proactive travel concierge — covering IndiGo, Air India, SpiceJet, and Vistara.
+
+| Phase | Capability |
+|-------|-----------|
+| **Phase 1 — RAG Foundation** | Policy Q&A with hybrid retrieval, metadata-filtered FAISS + BM25 + CrossEncoder reranker, 9-intent classifier |
+| **Phase 2 — Agentic Layer** | 10 tools, real API integrations — live flights, Razorpay payments, SendGrid email, Twilio SMS |
+| **Phase 3 — Proactive AI** | Delay prediction, check-in alerts, PDF boarding passes, analytics dashboard |
 
 ---
 
 ## Architecture
 
+![Architecture Diagram](docs/airAssist_architecture_diagram.png)
+
+### How a query flows through the system
+
 ```
 User Query
     │
     ▼
-┌─────────────────────────────┐
-│     Intent Classifier        │  GPT-3.5, temp=0, 9 intents
-└─────────────┬───────────────┘
-              │
-     ┌────────┴────────┐
-     ▼                 ▼
-  FAQ Flow        Booking Flow
-     │
-     ▼
-┌─────────────────────────────────────────────┐
-│              Hybrid Retriever                │
-│                                             │
-│  FAISS dense (top 8)  +  BM25 (top 8)       │
-│           ↓                                 │
-│     Airline metadata filter                 │
-│           ↓                                 │
-│  CrossEncoder reranker → top 4 chunks       │
-└─────────────────────────────────────────────┘
-     │
-     ▼
-┌─────────────────────────────┐
-│   Groq LLaMA 3.3 70B        │  Answer generation
-└─────────────────────────────┘
-     │
-     ▼
-┌─────────────────────────────┐
-│   ConversationMemory         │  Deque (10 turns) + user_prefs dict
-└─────────────────────────────┘
+Streamlit UI (localhost:8501)
+    │
+    ▼
+Intent Classifier — Groq LLaMA 3.3 70B · temp=0 · 14 classes
+    │
+    ├── FAQ intent ──────────► RAG Chain
+    │                           FAISS (dense) + BM25 (sparse) · 50/50 ensemble
+    │                           CrossEncoder reranker (ms-marco-MiniLM)
+    │                           Airline metadata filter → zero cross-airline contamination
+    │                           15,000 chunks · 5 data sources
+    │
+    ├── Booking ─────────────► Booking Engine
+    │                           Flask :5000 · Razorpay checkout
+    │                           FastAPI :8001 · PNR · SQLite · PDF boarding pass
+    │
+    └── Agentic ─────────────► Agent Loop (observe → plan → act · max 5 iterations)
+                                10 tools: check_status · search_flights · rebook
+                                calculate_refund · track_baggage · file_claim · …
+                                External: AviationStack · Razorpay · SendGrid · Twilio
+```
+
+### Data pipeline (Phase 1)
+
+```
+Wikipedia API ──┐
+Kaggle 128k   ──┤──► Chunker (400 tok) ──► Metadata tagger ──► FAISS vector store
+HuggingFace   ──┤                           airline/topic/route   15,000 chunks
+Playwright    ──┤
+Synthetic     ──┘
+```
+Every chunk is tagged at ingest. At query time, `airline="indigo"` filter runs *before* retrieval — Air India content cannot appear in an IndiGo answer by design.
+
+### Full booking flow (Phase 2)
+```
+Chat: "Search DEL→BOM"
+  → AviationStack API (real flight data)
+  → Flask booking page — passenger form + Razorpay checkout
+  → Payment verified via HMAC signature
+  → FastAPI: PNR generated + stored in SQLite
+  → SendGrid email dispatched
+  → Twilio SMS dispatched
+  → PDF boarding pass (ReportLab + QR code)
 ```
 
 ---
-
-## The 3 Technical Decisions That Made It Reliable
-
-### 1. Metadata-filtered chunks (structural cross-airline isolation)
-
-Every chunk scraped from airline websites is tagged at index time with:
-- `airline` — `indigo`, `air_india`, `spicejet`, `vistara`
-- `topic` — one of 8 categories: `baggage`, `refund`, `check_in`, `visa`, `seat`, `meal`, `delay`, `general`
-- `route_type` — `domestic`, `international`, or `both`
-
-Retrieval filters on these fields **before** vector search runs. Cross-airline confusion is structurally prevented, not prompt-engineered away.
-
-### 2. Three-stage hybrid retrieval
-
-```
-Stage 1 — Hybrid retrieval
-  FAISS dense search  →  top 8 by semantic similarity
-  BM25 keyword search →  top 8 by exact term match
-  Merged & deduplicated → up to 16 unique candidates
-
-Stage 2 — Airline filter
-  Keep only chunks matching requested airline (case-insensitive)
-
-Stage 3 — CrossEncoder reranker (ms-marco-MiniLM-L-6-v2)
-  Score all candidates against the query
-  Sort by relevance → keep top 4
-
-→ Final 4 chunks sent to LLM
-```
-
-Retrieval precision on a 25-question golden eval set: **91%**
-
-### 3. Typed, three-container memory
-
-`ConversationMemory` maintains three separate storage containers:
-
-| Container | Type | Behaviour |
-|---|---|---|
-| `turns` | `deque(maxlen=20)` | Auto-drops oldest turns when full — no manual truncation logic |
-| `user_prefs` | `dict` | Persists across turns: `preferred_seat`, `preferred_meal`, `preferred_airline` |
-| `active_booking` | `dict` | Mid-flow booking state scratchpad; cleared on `clear()`, prefs are not |
-
-The preference summary is injected into every system prompt so the LLM stays aware of what it knows about the user even across long conversations.
-
----
-
-## Knowledge Base Pipeline
-
-The bot's knowledge comes from 5 sources, all ingested by a single `build_knowledge_base.py` orchestrator:
-
-```
-1. Wikipedia scraper     — Airline pages + DGCA / Montreal Convention regulations
-2. Playwright scraper    — Dynamic airline website pages (AAI etc.)
-3. Kaggle datasets       — Twitter sentiment, Skytrax reviews, Bitext support QA
-4. Hugging Face datasets — Bitext customer support + travel FAQ (filtered to airline domain)
-5. Synthetic fallback    — Hand-written policy docs for coverage gaps (clearly labelled)
-```
-
-Each source produces a `.txt` + `.meta.json` pair per airline/topic, then the whole corpus is chunked (400 chars, 60-char overlap), embedded, and indexed into FAISS.
-
----
-
 ## Evaluation
 
-A keyword-match harness (`run_eval.py`) runs against a golden set of 25 test questions, each with:
-- Expected keywords that must appear in the answer
-- Optional airline filter
-- Fresh `ConversationMemory` per test case to prevent contamination
+### Retrieval precision
 
-A case passes if ≥ 50% of expected keywords are present. This is intentionally lightweight — deterministic, fast, and robust to wording variation while still verifying factual content.
+| Method | Precision |
+|--------|-----------|
+| Dense only (FAISS) | 60% |
+| Hybrid (FAISS + BM25) | 68% |
+| **Hybrid + CrossEncoder rerank** | **91%** |
 
-**Current results:** 91% retrieval precision on the golden set.
+### Golden eval set — 25 hand-crafted Q&A pairs
 
+```
+Passed:                   23 / 25  (92%)
+Keyword hit rate:         75.0%    (69 / 92 keywords)
+Cross-airline contamination:  0 cases
+```
+The 2 failures are data gaps (SpiceJet pet policy, Vistara fare conditions) — not retrieval errors.
+
+### Latency
+
+```
+RAG (FAQ query):     ~678 ms
+Agentic (tool call): ~714–2652 ms
+Average:             ~1348 ms
+```
+
+### Test coverage
+```
+67 tests collected · 64 passed · 3 failed (intent edge cases, not core pipeline)
+```
+
+---
+## Quick Start
+### Prerequisites
+
+- Python 3.12+
+- [Groq API key](https://console.groq.com) — free
+- [OpenAI API key](https://platform.openai.com) — embeddings only (~₹1 total)
+- [Razorpay test account](https://razorpay.com) — free
+- [AviationStack key](https://aviationstack.com) — free 500 calls/month
+- [SendGrid key](https://sendgrid.com) — free 100 emails/day
+- [Twilio account](https://twilio.com) — free trial
+
+### Setup
+
+```bash
+git clone https://github.com/yourusername/airAssist
+cd airAssist
+
+python -m venv .venv
+source .venv/bin/activate          # Mac/Linux
+# .venv\Scripts\activate           # Windows
+
+pip install -r requirements.txt
+
+cp .env.example .env
+# Add your API keys to .env
+```
+
+### Build knowledge base (one-time, ~15 min)
+
+```bash
+python build_knowledge_base.py
+```
+
+### Run (3 terminals)
+
+```bash
+# Terminal 1 — FastAPI confirmation engine
+uvicorn api.main:app --port 8001 --reload
+
+# Terminal 2 — Flask booking + Razorpay
+python booking_app/app.py
+
+# Terminal 3 — Streamlit chatbot
+streamlit run app.py --server.fileWatcherType none
+```
+
+Open [localhost:8501](http://localhost:8501)
+
+### Test payment flow
+```
+Card:    4111 1111 1111 1111
+Expiry:  12/28 · CVV: 123 · OTP: 1234
+```
 ---
 
 ## Project Structure
 
 ```
-airline-chatbot/
-├── rag/
-│   ├── scraper.py          # HTTP + BeautifulSoup scraper with graceful error handling
-│   ├── chunker.py          # Topic detection, route detection, RecursiveCharacterTextSplitter
-│   ├── embedder.py         # OpenAI text-embedding-3-small or BAAI/bge-small-en-v1.5 (local)
-│   ├── retriever.py        # Hybrid FAISS + BM25 + CrossEncoder reranker
-│   ├── synthetic_data.py   # Fallback synthetic policy generation
-│   ├── wiki_scraper.py     # Wikipedia REST API scraper
-│   ├── kaggle_loader.py    # Kaggle dataset ingestion
-│   └── hf_loader.py        # Hugging Face dataset ingestion
-├── chatbot/
-│   ├── memory.py           # ConversationMemory: deque + user_prefs + active_booking
-│   └── intent.py           # 9-intent classifier (LLM-based, temp=0)
-├── data/
-│   ├── raw/                # .txt + .meta.json pairs per airline/topic
-│   └── vector_store/       # FAISS index files
-├── build_knowledge_base.py # End-to-end pipeline orchestrator
-├── run_eval.py             # Keyword-match evaluation harness
-├── app.py                  # Streamlit UI
-└── requirements.txt
+airline_chatbot/
+├── agents/          Agent loop, disruption handler, 10 tool definitions
+├── api/             FastAPI :8001 — confirmation, PNR, booking lookup
+├── booking/
+├── booking_app/     Flask :5000 — passenger form + Razorpay checkout
+├── boarding_pass/   PDF generator with QR code (ReportLab)
+├── chatbot/         Intent classifier, RAG chain, conversation memory
+├── rag/             Scraper, chunker, embedder, hybrid retriever
+├── tools/           Live flights, payment, notifications, user profiles
+├── guards/          PII redactor (Presidio), faithfulness checker
+├── proactive/       Delay predictor, check-in scheduler (APScheduler)
+├── analytics/       Query tracker + Plotly dashboard
+├── evals/           Golden eval set (25 Q&A), eval runner
+├── tests/           Unit + integration tests (pytest · 67 tests)
+├── pages/           Streamlit multi-page (Analytics, My Bookings)
+├── data/            Vector store, SQLite databases, boarding passes
+└── app.py           Entry point
 ```
 
 ---
+## Tech Stack
 
-## Stack
+| Layer | Technology |
+|-------|-----------|
+| LLM | Groq LLaMA 3.3 70B |
+| Embeddings | OpenAI text-embedding-3-small |
+| Vector store | FAISS (local) |
+| Sparse retrieval | BM25 (rank-bm25) |
+| Reranker | CrossEncoder ms-marco-MiniLM-L-6-v2 |
+| Orchestration | LangChain EnsembleRetriever |
+| Agent framework | Custom observe-plan-act loop (Groq function calling) |
+| Payment | Razorpay |
+| Email | SendGrid |
+| SMS | Twilio |
+| Flight data | AviationStack REST API |
+| Backend | FastAPI + uvicorn |
+| Booking UI | Flask + Bootstrap 5 |
+| Frontend | Streamlit (multi-page) |
+| PDF | ReportLab + qrcode |
+| Scheduling | APScheduler |
+| PII | Microsoft Presidio |
+| Database | SQLite |
+| Charts | Plotly |
+| Testing | pytest |
 
-| Component | Technology |
-|---|---|
-| LLM | Groq LLaMA 3.3 70B (free tier) |
-| Embeddings | OpenAI `text-embedding-3-small` (or `BAAI/bge-small-en-v1.5` for local/offline) |
-| Vector store | FAISS |
-| Keyword search | BM25 (via `rank_bm25`) |
-| Reranker | `ms-marco-MiniLM-L-6-v2` (CrossEncoder, SentenceTransformers) |
-| Intent classifier | GPT-3.5 Turbo, temperature=0 |
-| Orchestration | LangChain |
-| UI | Streamlit |
-| Data sources | Wikipedia API, Playwright, Kaggle, Hugging Face |
+---
+## Pages
+
+| URL | Description |
+|-----|-------------|
+| `localhost:8501` | Main chatbot |
+| `localhost:8501/Analytics` | Metrics dashboard — intent distribution, latency, tool usage |
+| `localhost:8501/My_Bookings` | Booking history + boarding pass download |
+| `localhost:5000/book?...` | Passenger form + Razorpay checkout |
+| `localhost:8001/booking/{pnr}` | Booking lookup API |
 
 ---
 
-## Setup
-
-```bash
-git clone https://github.com/your-username/airline-chatbot.git
-cd airline-chatbot
-pip install -r requirements.txt
-```
-
-Set your API keys:
-```bash
-export GROQ_API_KEY=your_groq_key
-export OPENAI_API_KEY=your_openai_key   # only needed for embeddings + intent classifier
-```
-
-Build the knowledge base (first run only):
-```bash
-python build_knowledge_base.py
-```
-
-Run the app:
-```bash
-streamlit run app.py
-```
-
-Run evaluation:
-```bash
-python run_eval.py
-```
-
----
-
-## What's Coming in Phase 2 (Agentic)
-
-- Live flight status via real airline / aggregator APIs
-- Actual rebooking and cancellation flows
-- Refund calculation engine
-- Tool-calling agent replacing the current intent router
-
----
-
-## Honest Limitations
-
-- Booking is **mock only** — no real reservation system is connected
-- Scraped policy data may be stale; synthetic fallback is clearly labelled
-- Eval set (25 questions) is small — sufficient for regression testing, not a benchmark
-- Intent classifier adds one LLM call per query (latency tradeoff vs. accuracy)
-
----
-
-## Author
-
-**Garima Singla** · AI/ML Engineer  
-Building in public · [LinkedIn](https://linkedin.com/in/your-profile) · [GitHub](https://github.com/your-username)

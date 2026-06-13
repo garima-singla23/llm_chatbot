@@ -3,8 +3,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Ensure environment variables (e.g., XAI_API_KEY) are loaded for eval context.
-# The workspace .env sits one level above the repo root.
 workspace_env = Path(__file__).resolve().parents[2] / ".env"
 if workspace_env.exists():
     load_dotenv(workspace_env)
@@ -168,7 +166,7 @@ def print_results(eval_results: dict):
         print(f"{idx:<3} {status:<7} {question:<56} {score:>6.1f}%")
 
     print("-" * 90)
-    print(f"\n📊 Summary:")
+    print(f"\n[Summary]:")
     print(f"   Passed: {passed}/{total}")
     print(f"   Pass Rate: {(passed/total*100):.1f}%")
     print(f"   Overall Keyword Hit Rate: {(total_hits/total_keywords*100):.1f}% ({total_hits}/{total_keywords})")
@@ -184,7 +182,7 @@ if __name__ == "__main__":
     # Load golden set
     print("Loading golden set...")
     golden_set = load_golden_set(str(golden_set_path))
-    print(f"✓ Loaded {len(golden_set)} test cases")
+    print(f"[OK] Loaded {len(golden_set)} test cases")
 
     # Load vector store and build retriever
     print("\nBuilding retriever...")
@@ -192,9 +190,9 @@ if __name__ == "__main__":
         vs = embedder_module.load_vector_store()
         docs = chunker_module.chunk_all(str(project_root / "data" / "raw"))
         retriever = retriever_module.build_hybrid_retriever(vs, docs)
-        print("✓ Retriever built successfully")
+        print("[OK] Retriever built successfully")
     except Exception as e:
-        print(f"✗ Failed to build retriever: {e}")
+        print(f"[ERROR] Failed to build retriever: {e}")
         exit(1)
 
     # Run evaluations
