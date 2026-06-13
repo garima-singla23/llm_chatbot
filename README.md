@@ -23,7 +23,7 @@ Most airline chatbots break the moment you ask anything unexpected. AirAssist is
 
 ## Architecture
 
-![Architecture Diagram](docs/airAssist_architecture_diagram.png)
+![Architecture Diagram](airline_chatbot/docs/images/airAssist_architecture_diagram.png)
 
 ### How a query flows through the system
 
