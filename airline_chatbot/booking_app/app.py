@@ -10,7 +10,7 @@ import logging
 import requests.exceptions as req_exc
 import requests as req_lib
 from dotenv import load_dotenv
-
+from config import CONFIRMATION_API_URL, BOOKING_BASE_URL
 load_dotenv()
 
 # ---------------------------------------------------------------------------
@@ -322,7 +322,7 @@ def _call_confirmation_api(
 
     try:
         resp = req_lib.post(
-            "http://localhost:8001/confirm-booking",
+            f"{CONFIRMATION_API_URL}/confirm-booking",
             json=payload,
             timeout=15,
         )
@@ -396,7 +396,7 @@ def _fetch_booking_data(pnr: str) -> tuple[dict, dict]:
     """
     try:
         resp = req_lib.get(
-            f"http://localhost:8001/booking/{pnr}",
+            f"{CONFIRMATION_API_URL}/booking/{pnr}",
             timeout=5,
         )
         resp.raise_for_status()

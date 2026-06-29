@@ -1,17 +1,16 @@
 <div align="center">
-  AirAssist — AI Airline Travel Concierge
+<h1>AirAssist — AI Airline Travel Concierge</h1>
 
-**A 3-phase production-style AI system for airline travel — answers policy questions, executes real bookings, and proactively assists travellers.**
+A production-grade AI system demonstrating RAG, agentic workflows, and real payment integration across IndiGo, Air India, SpiceJet, and Vistara.
 
-[Architecture](#architecture) · [Evaluation](#evaluation) · [Quick Start](#quick-start) · [Tech Stack](#tech-stack)
+[Demo](#demo) · [Architecture](#architecture) · [Quick Start](#quick-start) · [Evaluation](#evaluation) · [Limitations](#limitations)
 
 </div>
 
----
-
 ## What This Is
+Most airline chatbots break the moment you ask anything unexpected. AirAssist is a learning project that explores how to build a production-style AI system across three phases — transforming a basic FAQ responder into a proactive travel concierge.
 
-Most airline chatbots break the moment you ask anything unexpected. AirAssist is built across three phases that transform a passive FAQ responder into a proactive travel concierge — covering IndiGo, Air India, SpiceJet, and Vistara.
+This is a portfolio/research project — not production-ready. See Known Limitations for deployment considerations.
 
 | Phase | Capability |
 |-------|-----------|
@@ -19,7 +18,6 @@ Most airline chatbots break the moment you ask anything unexpected. AirAssist is
 | **Phase 2 — Agentic Layer** | 10 tools, real API integrations — live flights, Razorpay payments, SendGrid email, Twilio SMS |
 | **Phase 3 — Proactive AI** | Delay prediction, check-in alerts, PDF boarding passes, analytics dashboard |
 
----
 
 ## Architecture
 
@@ -27,29 +25,33 @@ Most airline chatbots break the moment you ask anything unexpected. AirAssist is
 
 ### How a query flows through the system
 
-```
-User Query
-    │
-    ▼
-Streamlit UI (localhost:8501)
-    │
-    ▼
-Intent Classifier — Groq LLaMA 3.3 70B · temp=0 · 14 classes
-    │
-    ├── FAQ intent ──────────► RAG Chain
-    │                           FAISS (dense) + BM25 (sparse) · 50/50 ensemble
-    │                           CrossEncoder reranker (ms-marco-MiniLM)
-    │                           Airline metadata filter → zero cross-airline contamination
-    │                           15,000 chunks · 5 data sources
-    │
-    ├── Booking ─────────────► Booking Engine
-    │                           Flask :5000 · Razorpay checkout
-    │                           FastAPI :8001 · PNR · SQLite · PDF boarding pass
-    │
-    └── Agentic ─────────────► Agent Loop (observe → plan → act · max 5 iterations)
-                                10 tools: check_status · search_flights · rebook
-                                calculate_refund · track_baggage · file_claim · …
-                                External: AviationStack · Razorpay · SendGrid · Twilio
+```mermaid
+graph TD
+A[User Query] --> B[Streamlit UI :8501]
+B --> C{Intent Classifier}
+
+C -->|FAQ| D[RAG Pipeline]
+C -->|Booking| E[Booking Engine]
+C -->|Status/Change| F[Agent Loop]
+
+D --> D1[FAISS + BM25 Ensemble]
+D1 --> D2[CrossEncoder Rerank]
+D2 --> D3[Metadata Filter]
+D3 --> G[LLM Response]
+
+E --> E1[AviationStack API]
+E1 --> E2[Flask :5000 Checkout]
+E2 --> E3[Razorpay Payment]
+E3 --> E4[FastAPI :8001 PNR]
+E4 --> E5[SendGrid + Twilio]
+E5 --> E6[PDF Boarding Pass]
+
+F --> F1[Tool Selection]
+F1 --> F2[External API Calls]
+F2 --> F3[Max 5 Iterations]
+F3 --> G
+
+G --> H[Final Response]
 ```
 
 ### Data pipeline (Phase 1)
@@ -61,21 +63,33 @@ HuggingFace   ──┤                           airline/topic/route   15,000 c
 Playwright    ──┤
 Synthetic     ──┘
 ```
-Every chunk is tagged at ingest. At query time, `airline="indigo"` filter runs *before* retrieval — Air India content cannot appear in an IndiGo answer by design.
+Every chunk is tagged with {airline, topic, route} at ingestion. At query time, metadata filtering runs before vector search — preventing Air India policy from appearing in IndiGo answers.
+
+
 
 ### Full booking flow (Phase 2)
 ```
-Chat: "Search DEL→BOM"
-  → AviationStack API (real flight data)
-  → Flask booking page — passenger form + Razorpay checkout
-  → Payment verified via HMAC signature
-  → FastAPI: PNR generated + stored in SQLite
-  → SendGrid email dispatched
-  → Twilio SMS dispatched
-  → PDF boarding pass (ReportLab + QR code)
+User: "Search flights from DEL to BOM tomorrow"
+  │
+  ├─► AviationStack API ────────────► Live flight data
+  │
+  ├─► Flask renders booking form ───► Passenger details + seat selection
+  │
+  ├─► Razorpay checkout ────────────► Test card: 4111 1111 1111 1111
+  │
+  ├─► HMAC signature verification ──► Payment confirmed
+  │
+  ├─► FastAPI generates PNR ─────────► Stored in SQLite
+  │
+  ├─► SendGrid email dispatch ───────► Confirmation with PNR
+  │
+  ├─► Twilio SMS dispatch ───────────► "Your booking ABC123 is confirmed"
+  │
+  └─► PDF generation ────────────────► Boarding pass with QR code (ReportLab)
 ```
 
----
+
+
 ## Evaluation
 
 ### Retrieval precision
@@ -89,6 +103,7 @@ Chat: "Search DEL→BOM"
 ### Golden eval set — 25 hand-crafted Q&A pairs
 
 ```
+Dataset:    25 hand-labeled Q&A pairs (manual verification)
 Passed:                   23 / 25  (92%)
 Keyword hit rate:         75.0%    (69 / 92 keywords)
 Cross-airline contamination:  0 cases
@@ -98,9 +113,14 @@ The 2 failures are data gaps (SpiceJet pet policy, Vistara fare conditions) — 
 ### Latency
 
 ```
-RAG (FAQ query):     ~678 ms
-Agentic (tool call): ~714–2652 ms
-Average:             ~1348 ms
+Metric                   P50      P95      P99
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RAG query (FAQ)         678ms    1.2s     1.8s
+Agent (1 tool call)     714ms    1.5s     2.6s
+Agent (multi-tool)      1.3s     2.1s     2.9s
+Average (all queries)   1.3s     2.0s     2.7s
+
+Performance Gap: Target for production chat is <500ms. See optimization roadmap.
 ```
 
 ### Test coverage
@@ -187,32 +207,7 @@ airline_chatbot/
 ```
 
 ---
-## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| LLM | Groq LLaMA 3.3 70B |
-| Embeddings | OpenAI text-embedding-3-small |
-| Vector store | FAISS (local) |
-| Sparse retrieval | BM25 (rank-bm25) |
-| Reranker | CrossEncoder ms-marco-MiniLM-L-6-v2 |
-| Orchestration | LangChain EnsembleRetriever |
-| Agent framework | Custom observe-plan-act loop (Groq function calling) |
-| Payment | Razorpay |
-| Email | SendGrid |
-| SMS | Twilio |
-| Flight data | AviationStack REST API |
-| Backend | FastAPI + uvicorn |
-| Booking UI | Flask + Bootstrap 5 |
-| Frontend | Streamlit (multi-page) |
-| PDF | ReportLab + qrcode |
-| Scheduling | APScheduler |
-| PII | Microsoft Presidio |
-| Database | SQLite |
-| Charts | Plotly |
-| Testing | pytest |
-
----
 ## Pages
 
 | URL | Description |

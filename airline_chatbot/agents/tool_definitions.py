@@ -13,6 +13,7 @@ import re
 import uuid
 from urllib.parse import urlencode
 from typing import Dict, List, Optional
+from airline_chatbot.config import BOOKING_BASE_URL
 from proactive.delay_predictor import predict_delay
 
 from booking.booking_engine import BOOKINGS_DB
@@ -59,7 +60,7 @@ def get_booking_page_url(flight: Dict, origin: str, destination: str, date: str 
         "gate": flight.get("gate", "TBA"),
         "terminal": flight.get("terminal", "T1"),
     }
-    url = f"http://localhost:5000/book?{urlencode(params)}"
+    url = f"{BOOKING_BASE_URL}/book?{urlencode(params)}"
     return {"booking_url": url, "message": f"Click this link to complete booking: {url}"}
 
 

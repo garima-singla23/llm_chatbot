@@ -1,0 +1,59 @@
+services:
+
+  api:
+    build:
+      context: ./airline_chatbot
+      dockerfile: ../Dockerfile.api
+    container_name: airassist-api
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    volumes:
+      - ./airline_chatbot/data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  booking:
+    build:
+      context: ./airline_chatbot
+      dockerfile: ../Dockerfile.booking
+    container_name: airassist-booking
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      CONFIRMATION_API_URL: http://api:8001
+    volumes:
+      - ./airline_chatbot/data:/app/data
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  chatbot:
+    build:
+      context: ./airline_chatbot
+      dockerfile: ../Dockerfile.streamlit
+    container_name: airassist-chatbot
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      CONFIRMATION_API_URL: http://api:8001
+      BOOKING_BASE_URL: http://booking:5000
+    volumes:
+      - ./airline_chatbot/data:/app/data
+    depends_on:
+      api:
+        condition: service_healthy
+      booking:
+        condition: service_started
+    restart: unless-stopped

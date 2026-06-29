@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.pytest_cache/
+*.md
+.vscode/
+node_modules/
+data/raw/
+data/boarding_passes/
+*.log
+eval_results.txt
+unit_test_results.txt
+
+# KEEP these — needed at runtime:
+# data/vector_store/
+# data/bookings.db (if exists, will be created if not)

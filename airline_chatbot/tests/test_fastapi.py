@@ -1,14 +1,16 @@
 import requests
 import json
 
+from airline_chatbot.config import BOOKING_BASE_URL, CONFIRMATION_API_URL
+
 results = {}
 
 # ----------------------------
 # Health Checks
 # ----------------------------
 services = [
-    ("FastAPI", "http://localhost:8001/health"),
-    ("Flask", "http://localhost:5000/health"),
+    ("FastAPI", f"{CONFIRMATION_API_URL}/health"),
+    ("Flask", f"{BOOKING_BASE_URL}/health"),
 ]
 
 for name, url in services:
@@ -58,7 +60,7 @@ payload = {
 
 try:
     r = requests.post(
-        "http://localhost:8001/confirm-booking",
+        f"{CONFIRMATION_API_URL}/confirm-booking",
         json=payload,
         timeout=10
     )
