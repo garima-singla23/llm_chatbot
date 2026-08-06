@@ -16,7 +16,7 @@ This is a portfolio/research project — not production-ready. See Known Limitat
 |-------|-----------|
 | **Phase 1 — RAG Foundation** | Policy Q&A with hybrid retrieval, metadata-filtered FAISS + BM25 + CrossEncoder reranker, 9-intent classifier |
 | **Phase 2 — Agentic Layer** | 10 tools, real API integrations — live flights, Razorpay payments, SendGrid email, Twilio SMS |
-| **Phase 3 — Proactive AI** | Delay prediction, check-in alerts, PDF boarding passes, analytics dashboard |
+| **Phase 3 — Proactive AI** | Delay prediction, check-in alerts, PDF boarding passes |
 
 
 ## Architecture
